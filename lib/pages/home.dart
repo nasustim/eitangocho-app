@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 class Home extends StatefulWidget {
@@ -7,7 +9,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Location location = new Location();
+  Location location = Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
   LocationData? _locationData;
@@ -48,17 +50,34 @@ class _HomeState extends State<Home> {
       return const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: Text("Please enable Geolocate permission"),
+          Row(
+            children: [
+              Text("Please enable Geolocate permission"),
+            ],
           ),
         ],
       );
     }
 
-    return _locationData == null
-        ? const Center(child: Text("Now loading..."))
-        : Center(
-            child: Text(
-                "lat: ${_locationData!.latitude}, lng: ${_locationData!.longitude}"));
+    if (_locationData == null ||
+        _locationData?.latitude == null ||
+        _locationData?.longitude == null) {
+      return const Center(child: Text("Now loading..."));
+    }
+
+    return Row(
+      children: [
+        FlutterMap(
+          options: MapOptions(
+            initialCenter:
+                LatLng(_locationData!.latitude!, _locationData!.longitude!),
+          ),
+          children: const [],
+        ),
+        Text(
+          "lat: ${_locationData!.latitude!}, lng: ${_locationData!.longitude!}",
+        )
+      ],
+    );
   }
 }
