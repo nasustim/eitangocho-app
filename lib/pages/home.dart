@@ -19,27 +19,40 @@ class _HomeState extends State<Home> {
   }
 
   _getLocation() async {
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled!) {
+    var serviceEnabled = await location.serviceEnabled();
+    setState(() {
+      _serviceEnabled = serviceEnabled;
+    });
+    if (!serviceEnabled) {
       return;
     }
 
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
-        return;
-      }
     }
 
-    _locationData = await location.getLocation();
-    setState(() {});
+    if (_permissionGranted != PermissionStatus.granted) {
+      return;
+    }
+
+    var ld = await location.getLocation();
+    setState(() {
+      _locationData = ld;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     if (_serviceEnabled == null || _serviceEnabled == false) {
-      return const Center(child: Text("Please enable Geolocate permission"));
+      return const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: Text("Please enable Geolocate permission"),
+          ),
+        ],
+      );
     }
 
     return _locationData == null
