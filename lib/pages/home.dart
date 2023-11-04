@@ -3,12 +3,16 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
+typedef HomeState = State<Home>;
+
 class Home extends StatefulWidget {
+  const Home({super.key});
+
   @override
-  _HomeState createState() => _HomeState();
+  HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends HomeState {
   Location location = Location();
   bool? _serviceEnabled;
   PermissionStatus? _permissionGranted;
