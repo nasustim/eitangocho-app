@@ -17,6 +17,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ steps.get-env.outputs.FLUTTER_VERSION }}
+          channel: "stable"
           cache: true
       - run: flutter pub get
       - run: flutter test
