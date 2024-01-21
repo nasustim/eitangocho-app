@@ -20,10 +20,10 @@ jobs:
           echo "FLUTTER_VERSION=$flutter_version" >> "$GITHUB_OUTPUT"
 
           java_distoribution=$(
-            grep 'java' .tool-versions | sed -E 's/.+ (.+)\-(.+)/\1/'
+            grep 'java' .tool-versions | sed -E 's/.+ (.+)\-.+/\1/'
           )
           java_version=$(
-            grep 'java' .tool-versions | sed -E 's/.+ (.+)\-(.+)/\2/'
+            grep 'java' .tool-versions | sed -E 's/.+ .+\-([0-9]+).+/\1/'
           )
           echo "JAVA_DISTRIBUTION=$java_distoribution" >> "$GITHUB_OUTPUT"
           echo "JAVA_VERSION=$java_version" >> "$GITHUB_OUTPUT"
