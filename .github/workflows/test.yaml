@@ -14,8 +14,7 @@ jobs:
       - id: get-env
         run: |
           flutter_version=$( \
-            cat .tool-versions \
-              | grep flutter \
+            grep 'flutter' .tool-versions \
               | sed -E 's/.* ([0-9]+\.[0-9]+\.[0-9]+)\-.*/\1/' \
           )
           echo "FLUTTER_VERSION=$flutter_version" >> "$GITHUB_OUTPUT"
