@@ -18,10 +18,19 @@ jobs:
               | sed -E 's/.* ([0-9]+\.[0-9]+\.[0-9]+)\-.*/\1/' \
           )
           echo "FLUTTER_VERSION=$flutter_version" >> "$GITHUB_OUTPUT"
+
+          java_distoribution=$(
+            grep 'java' .tool-versions | sed -E 's/.+ (.+)\-.+/\1/'
+          )
+          java_version=$(
+            grep 'java' .tool-versions | sed -E 's/.+ .+\-([0-9]+).+/\1/'
+          )
+          echo "JAVA_DISTRIBUTION=$java_distoribution" >> "$GITHUB_OUTPUT"
+          echo "JAVA_VERSION=$java_version" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
-          java-version: "11"
+          distribution: ${{ steps.get-env.outputs.JAVA_DISTRIBUTION }}
+          java-version: ${{ steps.get-env.outputs.JAVA_VERSION }}
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ steps.get-env.outputs.FLUTTER_VERSION }}
