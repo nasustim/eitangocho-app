@@ -1,0 +1,34 @@
+name: Build Android
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: get-env
+        run: |
+          flutter_version=$( \
+            cat .tool-versions \
+              | grep flutter \
+              | sed -E 's/.* ([0-9]+\.[0-9]+\.[0-9]+)\-.*/\1/' \
+          )
+          echo "FLUTTER_VERSION=$flutter_version" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "zulu"
+          java-version: "11"
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-env.outputs.FLUTTER_VERSION }}
+          channel: "stable"
+          cache: true
+      - run: flutter pub get
+      - run: flutter test
+      - run: flutter build apk
+      - run: flutter build appbundle
