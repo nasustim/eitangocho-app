@@ -1,4 +1,5 @@
 import 'package:eitangocho_app/constants.dart' as constants;
+import 'package:eitangocho_app/domain/word/word.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +15,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = ref.watch(countProvider);
+    final words = ref.watch(wordsProvider);
 
     return MaterialApp(
       title: constants.appName,
@@ -32,6 +34,7 @@ class MyApp extends ConsumerWidget {
                 "You have pushed the button this many times: $count",
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
+              Text(words.toString()),
             ],
           ),
         ),
